@@ -10,10 +10,13 @@ class PostController extends Controller
     public function index()
     {
         // 投稿を新しい順で取得！
-        $posts = \App\Models\Post::latest()->get();
+        // $posts = \App\Models\Post::latest()->get();
+        // return view('posts.index', compact('posts'));
+
+        $posts = Post::latest()->get();
         return view('posts.index', compact('posts'));
     }
-    
+
     // 投稿作成画面を表示する
     public function create()
     {

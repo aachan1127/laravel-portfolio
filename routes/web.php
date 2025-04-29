@@ -19,9 +19,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
     // 管理画面からの投稿
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    //ダッシュボード用の投稿一覧
+    Route::prefix('dashboard')->group(function () {
+        Route::resource('posts', App\Http\Controllers\Dashboard\PostController::class);
+    });
 });
 
 require __DIR__ . '/auth.php';

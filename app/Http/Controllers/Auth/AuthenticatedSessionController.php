@@ -28,7 +28,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+// 自作のダッシュボードに遷移
+        return redirect()->intended('/dashboard/posts');
     }
 
     /**
