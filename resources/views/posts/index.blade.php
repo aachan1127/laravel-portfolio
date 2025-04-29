@@ -9,6 +9,25 @@
 </head>
 
 <body>
+    <!-- 🔐 ログイン・登録ボタン表示 -->
+    <div style="text-align: right; margin-bottom: 20px;">
+
+        {{-- ログインしていない人向け --}}
+        @guest
+            <a href="{{ route('login') }}">ログイン</a> |
+            <a href="{{ route('register') }}">新規登録</a>
+
+        {{-- ログイン中のユーザー向け（名前表示とログアウト） --}}
+        @else
+            <span>ようこそ、{{ Auth::user()->name }} さん</span> |
+            <a href="{{ route('dashboard') }}">ダッシュボード</a> |
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" style="background: none; border: none; color: blue; cursor: pointer;">ログアウト</button>
+            </form>
+        @endguest
+    </div>
+
     <h1>投稿一覧</h1>
 
     @if(session('success'))
