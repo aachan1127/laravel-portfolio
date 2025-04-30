@@ -7,14 +7,8 @@
 <body>
     <h1>管理画面｜投稿一覧</h1>
 
-    <p>
-        <a href="{{ route('posts.create') }}">＋ 新しい投稿を作成する</a>
-    </p>
-
-    <p>
-        <a href="{{ url('/') }}">← トップページに戻る</a>
-    </p>
-
+    <p><a href="{{ route('posts.create') }}">＋ 新しい投稿を作成する</a></p>
+    <p><a href="{{ url('/') }}">← トップページに戻る</a></p>
 
     @if (session('success'))
         <p style="color: green;">{{ session('success') }}</p>
@@ -30,38 +24,38 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($posts as $post)
-                <tr>
-                    <td>{{ $post->title }}</td>
-                    <td>{{ $post->description }}</td>
+        @foreach ($posts as $post)
+            <li style="margin-bottom: 40px;">
+                <h2>{{ $post->title }}</h2>
+                <p>{{ $post->description }}</p>
 
-                    {{-- 画像投稿 --}}
-                    <td>
+                @if ($post->url)
+                    <p><a href="{{ $post->url }}" target="_blank">リンクを見る</a></p>
+                @endif
+
+                @if ($post->files->isNotEmpty())
+                    <div style="margin-top: 10px;">
                         @foreach ($post->files as $file)
+
+                            {{-- debug: 今だけ URL を表示して様子を見る --}}
+                            {{-- <p style="font-size:12px;color:#888;">{{ $file->url }}</p> --}}
+
                             @if ($file->file_type === 'image')
-                                <img src="{{ asset('storage/' . $file->file_path) }}" alt="画像" width="150" style="margin-bottom: 10px;">
+                                <img src="{{ $file->url }}"
+                                     alt="画像"
+                                     width="150"
+                                     style="margin-bottom: 10px;">
                             @elseif ($file->file_type === 'video')
-                                <video width="200" controls style="margin-bottom: 10px;">
-                                    <source src="{{ asset('storage/' . $file->file_path) }}">
-                                    お使いのブラウザは video タグに対応していません。
+                                <video width="300" controls style="margin-bottom: 10px;">
+                                    <source src="{{ $file->url }}">
                                 </video>
                             @endif
                         @endforeach
-                    </td>
-
-
-                    <td>
-                        <a href="{{ route('posts.edit', $post->id) }}">編集</a> |
-                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">削除</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+                    </div>
+                @endif
+            </li>
+        @endforeach
         </tbody>
     </table>
-
 </body>
 </html>

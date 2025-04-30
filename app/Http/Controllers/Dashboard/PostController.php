@@ -7,6 +7,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Models\PostFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class PostController extends Controller
 {
@@ -22,7 +24,6 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = \App\Models\Post::findOrFail($id);
-        // $post = Post::findOrFail($id);
 
         return view('dashboard.posts.edit', compact('post'));
     }
@@ -69,47 +70,34 @@ class PostController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-    // store() メソッド
+    // store()メソッド
+    // PostController.php  ─ store() 全面
     public function store(Request $request)
     {
-        // 基本バリデーション
-        $rules = [
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'url' => 'nullable|url|max:255',
-        ];
-
-        // ファイルがあるときだけ追加
-        if ($request->hasFile('files')) {
-            $rules['files.*'] = 'file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:10240';
-        }
-
-        $request->validate($rules);
-
-
-        // 投稿の保存
-        $post = Post::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'url' => $request->url,
+        /* 1. バリデーション */
+        $request->validate([
+            'title'       => 'required|max:255',
+            'description' => 'required',          // ← description を必須に
+            'url'         => 'nullable|url|max:255',
+            'files.*'     => 'file|mimes:jpg,jpeg,png,gif,mp4,mov,avi|max:10240',
         ]);
 
-        // 複数ファイルの保存
+        /* 2. 本体を保存 */
+        $post = Post::create($request->only('title', 'description', 'url'));
+
+        /* 3. ファイルがあれば S3 へ */
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $path = $file->store('posts', 'public');
+                $path = $file->store('posts', 's3');
+                $type = str_starts_with($file->getMimeType(), 'image') ? 'image' : 'video';
 
-                $mime = $file->getMimeType();
-                $fileType = str_starts_with($mime, 'image') ? 'image' : 'video';
-
-                PostFile::create([
-                    'post_id' => $post->id,
+                $post->files()->create([
                     'file_path' => $path,
-                    'file_type' => $fileType,
+                    'file_type' => $type,
                 ]);
             }
         }
 
-        return redirect()->route('posts.index')->with('success', '投稿が作成されました！');
+        return redirect()->route('posts.index')->with('success', '投稿しました！');
     }
 }
