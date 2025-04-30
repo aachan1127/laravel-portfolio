@@ -2,13 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\Dashboard\PostController;
 
-// Route::get('/', function () {
-//     return view('index');
-// });
-Route::get('/', [PostController::class, 'index']);
-
+Route::get('/', [PostController::class, 'publicIndex']); // 一般公開向けの投稿一覧
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -19,13 +15,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-    // 管理画面からの投稿
-    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    //ダッシュボード用の投稿一覧
+    // 管理画面用投稿機能（投稿作成・編集・削除）
     Route::prefix('dashboard')->group(function () {
-        Route::resource('posts', App\Http\Controllers\Dashboard\PostController::class);
+        Route::resource('posts', PostController::class);
     });
 });
 

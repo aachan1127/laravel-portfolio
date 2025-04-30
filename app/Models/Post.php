@@ -12,7 +12,13 @@ class Post extends Model
     protected $fillable = [
         'title',
         'description',
-        'image_path', // 後で使う
+        'image_path', // ←これは今後不要になるかも
         'url',
     ];
+
+    // 🔽 複数ファイルとのリレーション
+    public function files()
+    {
+        return $this->hasMany(\App\Models\PostFile::class);
+    }
 }

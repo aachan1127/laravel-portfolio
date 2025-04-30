@@ -25,6 +25,7 @@
             <tr>
                 <th>タイトル</th>
                 <th>説明</th>
+                <th>メディア</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -33,6 +34,22 @@
                 <tr>
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->description }}</td>
+
+                    {{-- 画像投稿 --}}
+                    <td>
+                        @foreach ($post->files as $file)
+                            @if ($file->file_type === 'image')
+                                <img src="{{ asset('storage/' . $file->file_path) }}" alt="画像" width="150" style="margin-bottom: 10px;">
+                            @elseif ($file->file_type === 'video')
+                                <video width="200" controls style="margin-bottom: 10px;">
+                                    <source src="{{ asset('storage/' . $file->file_path) }}">
+                                    お使いのブラウザは video タグに対応していません。
+                                </video>
+                            @endif
+                        @endforeach
+                    </td>
+
+
                     <td>
                         <a href="{{ route('posts.edit', $post->id) }}">編集</a> |
                         <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
