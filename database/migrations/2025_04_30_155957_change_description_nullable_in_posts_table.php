@@ -9,16 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-    {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->text('description')->nullable()->change();
-        });
-    }
-    public function down()
-    {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->text('description')->nullable(false)->change();
-        });
-    }
+public function up()
+{
+    Schema::table('posts', function (Blueprint $table) {
+        $table->text('description')->nullable()->change();
+    });
+}
+public function down()
+{
+    Schema::table('posts', function (Blueprint $table) {
+        $table->text('description')->nullable(false)->change();
+    });
+}
 };

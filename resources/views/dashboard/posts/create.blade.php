@@ -37,14 +37,37 @@
 
         <div>
             <label>画像・動画ファイル（複数可）</label><br>
-            <p>複数ファイルを選択したい場合はCtrl / Command キーを押しながらファイルをクリック</p><br>
+            <p>Ctrl / Command で複数選択可能</p>
             <input type="file" name="files[]" multiple accept="image/*,video/*">
-
+            
         </div>
 
         <button type="submit">投稿する</button>
     </form>
 
     <p><a href="{{ route('posts.index') }}">← 投稿一覧に戻る</a></p>
+
+    {{-- アップロードできない拡張子にはアラートを表示 --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.querySelector('input[type="file"]');
+
+            if (fileInput) {
+                fileInput.addEventListener('change', () => {
+                    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov', 'avi'];
+                    for (const file of fileInput.files) {
+                        const ext = file.name.split('.').pop().toLowerCase();
+                        if (!validExtensions.includes(ext)) {
+                            alert('拡張子が対応していません: ' + file.name);
+                            fileInput.value = ''; // 入力リセット
+                            break;
+                        }
+                    }
+                });
+            }
+        });
+        </script>
+
+
 </body>
 </html>

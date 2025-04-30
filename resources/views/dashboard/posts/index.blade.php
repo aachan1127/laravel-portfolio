@@ -1,61 +1,66 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>管理画面｜投稿一覧</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理画面｜投稿一覧</title>
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
+
+  <div class="container">
     <h1>管理画面｜投稿一覧</h1>
 
-    <p><a href="{{ route('posts.create') }}">＋ 新しい投稿を作成する</a></p>
-    <p><a href="{{ url('/') }}">← トップページに戻る</a></p>
+    <div style="margin-bottom: 20px;">
+      <a href="{{ route('posts.create') }}" class="button-link">＋ 新しい投稿を作成</a>
+      <a href="{{ url('/') }}" class="button-link">← トップページに戻る</a>
+    </div>
 
     @if (session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+      <p style="color: green;">{{ session('success') }}</p>
     @endif
 
-    <table border="1" cellpadding="8">
-        <thead>
-            <tr>
-                <th>タイトル</th>
-                <th>説明</th>
-                <th>メディア</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
+    @if ($posts->isEmpty())
+      <p>まだ投稿がありません。</p>
+    @else
+    <ul class="post-grid">
         @foreach ($posts as $post)
-            <li style="margin-bottom: 40px;">
-                <h2>{{ $post->title }}</h2>
-                <p>{{ $post->description }}</p>
+          <li>
+            <h2>{{ $post->title }}</h2>
 
-                @if ($post->url)
-                    <p><a href="{{ $post->url }}" target="_blank">リンクを見る</a></p>
+            @if ($post->files->isNotEmpty())
+              @foreach ($post->files as $file)
+                @if ($file->file_type === 'image')
+                  <img src="{{ Storage::disk('s3')->url($file->file_path) }}" alt="画像">
+                @elseif ($file->file_type === 'video')
+                  <video controls>
+                    <source src="{{ Storage::disk('s3')->url($file->file_path) }}">
+                    このブラウザは video タグに対応していません。
+                  </video>
                 @endif
+              @endforeach
+            @endif
 
-                @if ($post->files->isNotEmpty())
-                    <div style="margin-top: 10px;">
-                        @foreach ($post->files as $file)
+            <p>{{ $post->description }}</p>
 
-                            {{-- debug: 今だけ URL を表示して様子を見る --}}
-                            {{-- <p style="font-size:12px;color:#888;">{{ $file->url }}</p> --}}
+            @if ($post->url)
+              <a href="{{ $post->url }}" target="_blank" class="button-link">🔗 リンクを見る</a>
+            @endif
 
-                            @if ($file->file_type === 'image')
-                                <img src="{{ $file->url }}"
-                                     alt="画像"
-                                     width="150"
-                                     style="margin-bottom: 10px;">
-                            @elseif ($file->file_type === 'video')
-                                <video width="300" controls style="margin-bottom: 10px;">
-                                    <source src="{{ $file->url }}">
-                                </video>
-                            @endif
-                        @endforeach
-                    </div>
-                @endif
-            </li>
+            <div style="margin-top: 10px;">
+              <a href="{{ route('posts.edit', $post->id) }}" class="button-link">✏ 編集</a>
+
+              <form action="{{ route('posts.destroy', $post->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="button-link" onclick="return confirm('本当に削除しますか？')">🗑 削除</button>
+              </form>
+            </div>
+          </li>
         @endforeach
-        </tbody>
-    </table>
+      </ul>
+    @endif
+  </div>
+
 </body>
 </html>
