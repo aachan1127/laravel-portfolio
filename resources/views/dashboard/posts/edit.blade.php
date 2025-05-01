@@ -5,7 +5,10 @@
     <title>投稿を編集</title>
 
     {{-- 既存サイト共通スタイル --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
+
+    <link rel="stylesheet"
+      href="{{ asset('css/style.css') }}?v={{ filemtime(public_path('css/style.css')) }}">
 
     {{-- 編集ページ専用の軽いカスタム --}}
     <style>

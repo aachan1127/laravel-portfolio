@@ -5,7 +5,10 @@
     <title>新しい投稿を作成</title>
 
     {{-- 既存 UI と同じスタイル --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
+
+    <link rel="stylesheet"
+      href="{{ asset('css/style.css') }}?v={{ filemtime(public_path('css/style.css')) }}">
 
     {{-- 投稿画面だけの軽いカスタム --}}
     <style>
