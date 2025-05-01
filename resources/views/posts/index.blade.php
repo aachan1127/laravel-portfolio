@@ -6,7 +6,7 @@
   <title>トップページ</title>
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
-<body>
+<body class="home">
 
   <div class="container">
     <div style="text-align: right; margin-bottom: 20px;">
@@ -15,7 +15,7 @@
         <a href="{{ route('register') }}" class="button-link">新規登録</a>
       @else
         <span>ようこそ、{{ Auth::user()->name }} さん</span> |
-        <a href="{{ route('posts.index') }}" class="button-link">ダッシュボード</a>
+        <a href="{{ route('posts.index') }}" class="button-link">管理画面</a>
         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
           @csrf
           <button type="submit" class="button-link">ログアウト</button>
@@ -23,7 +23,7 @@
       @endguest
     </div>
 
-    <h1>投稿一覧</h1>
+    <h1>制作物一覧</h1>
 
     @if (session('success'))
       <p style="color: green;">{{ session('success') }}</p>
@@ -60,6 +60,5 @@
       </ul>
     @endif
   </div>
-
 </body>
 </html>

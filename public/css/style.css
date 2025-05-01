@@ -6,6 +6,10 @@ body {
     color: #333;
   }
 
+  body.home {                     /* ← . 付きでクラス名 */
+    background-color: #cae3eb;    /* ホームだけ薄いブルー系 */
+  }
+
   header, footer {
     background-color: #f4f4f4;
     padding: 10px 20px;
@@ -70,6 +74,18 @@ body {
     display: inline-block;
     padding: 6px 12px;
     background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+  }
+
+  a.button-link-up {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #57b45c;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;

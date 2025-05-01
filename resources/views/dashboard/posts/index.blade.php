@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>管理画面｜投稿一覧</title>
+  <title>管理画面｜制作物一覧</title>
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 
   <div class="container">
-    <h1>管理画面｜投稿一覧</h1>
+    <h1>管理画面｜制作物一覧</h1>
 
     <div style="margin-bottom: 20px;">
-      <a href="{{ route('posts.create') }}" class="button-link">＋ 新しい投稿を作成</a>
-      <a href="{{ url('/') }}" class="button-link">← トップページに戻る</a>
+        <a href="{{ url('/') }}" class="button-link">← トップページに戻る</a>
+      <a href="{{ route('posts.create') }}" class="button-link-up">＋ 新しい投稿を作成</a>
     </div>
 
     @if (session('success'))
