@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>管理画面｜制作物一覧</title>
 
-  <link rel="stylesheet"
-  href="{{ asset('css/style.css') }}?v={{ filemtime(public_path('css/style.css')) }}">
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ filemtime(public_path('css/style.css')) }}">
 
   {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
 </head>
+
 <body>
 
   <div class="container">
     <h1>管理画面｜制作物一覧</h1>
 
     <div style="margin-bottom: 20px;">
-        <a href="{{ url('/') }}" class="button-link">← トップページに戻る</a>
+      <a href="{{ url('/') }}" class="button-link">← トップページに戻る</a>
       <a href="{{ route('posts.create') }}" class="button-link-up">＋ 新しい投稿を作成</a>
     </div>
 
@@ -27,7 +28,7 @@
     @if ($posts->isEmpty())
       <p>まだ投稿がありません。</p>
     @else
-    <ul class="post-grid">
+      <ul class="post-grid">
         @foreach ($posts as $post)
           <li>
             <h2>{{ $post->title }}</h2>
@@ -45,7 +46,8 @@
               @endforeach
             @endif
 
-            <p>{{ $post->description }}</p>
+            {{-- ★ 改行保持して説明文を表示させる ★ --}}
+            <p>{!! nl2br(e($post->description)) !!}</p>
 
             @if ($post->url)
               <a href="{{ $post->url }}" target="_blank" class="button-link">🔗 リンクを見る</a>
@@ -67,4 +69,5 @@
   </div>
 
 </body>
+
 </html>

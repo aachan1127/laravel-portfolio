@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>トップページ</title>
   {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
 
-  <link rel="stylesheet"
-      href="{{ asset('css/style.css') }}?v={{ filemtime(public_path('css/style.css')) }}">
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ filemtime(public_path('css/style.css')) }}">
 </head>
+
 <body class="home">
 
   <div class="container">
@@ -35,7 +36,7 @@
     @if ($posts->isEmpty())
       <p>まだ投稿がありません。</p>
     @else
-    <ul class="post-grid">
+      <ul class="post-grid">
         @foreach ($posts as $post)
           <li>
             <h2>{{ $post->title }}</h2>
@@ -53,7 +54,8 @@
               @endforeach
             @endif
 
-            <p>{{ $post->description }}</p>
+            {{-- ★ 改行保持して説明文を表示させる ★ --}}
+            <p>{!! nl2br(e($post->description)) !!}</p>
 
             @if ($post->url)
               <a href="{{ $post->url }}" target="_blank" class="button-link">🔗 リンクを見る</a>
@@ -64,4 +66,5 @@
     @endif
   </div>
 </body>
+
 </html>
